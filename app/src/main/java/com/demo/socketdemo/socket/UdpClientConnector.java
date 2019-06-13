@@ -23,6 +23,10 @@ public class UdpClientConnector {
 
     private boolean isSend = false;
 
+    private String serverIp;
+
+    private int serverPort;
+
     public interface ConnectLinstener {
         void onReceiveData(String data);
     }
@@ -51,11 +55,12 @@ public class UdpClientConnector {
             }
         }
     };
-
     /**
      * 创建udp发送连接（服务端ip地址、端口号、超时时间）
      */
-    public void createConnector(final String ip,final int port) {
+    public void createConnector(String ip,int port) {
+        this.serverIp = ip;
+        this.serverPort = port;
         if (mSendThread == null) {
             mSendThread = new Thread(new Runnable() {
                 @Override
@@ -67,9 +72,9 @@ public class UdpClientConnector {
                         try {
                             socket = new DatagramSocket();
                             socket.setSoTimeout(10*1000);
-                            InetAddress serverAddress = InetAddress.getByName(ip);
+                            InetAddress serverAddress = InetAddress.getByName(serverIp);
                             byte data[] = mSendHexString.getBytes("utf-8");
-                            DatagramPacket sendPacket = new DatagramPacket(data, data.length, serverAddress, port);
+                            DatagramPacket sendPacket = new DatagramPacket(data, data.length, serverAddress, serverPort);
                             socket.send(sendPacket);
                             socket.close();
                         } catch (Exception e) {

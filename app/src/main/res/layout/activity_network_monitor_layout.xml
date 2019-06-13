@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</LinearLayout>
+<com.base.lib.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_network_monitor">
+    <com.base.lib.autolayout.AutoLinearLayout
+        android:layout_width="800px"
+        android:layout_height="806px"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250px"
+        android:background="@drawable/bg_speed">
+        <TextView
+            android:id="@+id/net_speed_text"
+            style="@style/normal_white_text_style"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_32"
+            android:text="525"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/net_unit_text"
+            style="@style/normal_text_style"
+            android:textSize="@dimen/text_size_32"
+            android:text="KBS"
+            android:textColor="#65C3FF"/>
+    </com.base.lib.autolayout.AutoLinearLayout>
+    <Button
+        android:id="@+id/set_up_btn"
+        android:layout_width="599px"
+        android:layout_height="119px"
+        android:onClick="toSetting"
+        android:background="@drawable/bg_set_up_btn"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200px"/>
+    <Button
+        android:id="@+id/exit_btn"
+        android:layout_width="200px"
+        android:layout_height="100px"
+        android:background="@null"
+        android:onClick="exitApp"/>
+</com.base.lib.autolayout.AutoRelativeLayout>

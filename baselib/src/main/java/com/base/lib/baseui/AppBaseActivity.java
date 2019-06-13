@@ -174,8 +174,8 @@ public class AppBaseActivity extends AppCompatActivity {
      * @param key
      * @return
      */
-    public int getIntegerPreference(String key){
-        return PreferenceUtil.getPreference(getApplicationContext()).getIntPreference(key,0);
+    public int getIntegerPreference(String key,int defaultValue){
+        return PreferenceUtil.getPreference(getApplicationContext()).getIntPreference(key,defaultValue);
     }
 
     /**

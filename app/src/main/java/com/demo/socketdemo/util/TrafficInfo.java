@@ -37,8 +37,8 @@ public class TrafficInfo {
     private Handler mHandler;
 
     /** 更新频率（每几秒更新一次,至少1秒） */
-    private final int UPDATE_FREQUENCY = 1;
-    private int times = 1;
+    public long update_interval = 200;
+    private int times = 0;
 
     public TrafficInfo(Context mContext, Handler mHandler, int uid) {
         this.mContext = mContext;
@@ -56,6 +56,11 @@ public class TrafficInfo {
             instance = new TrafficInfo(mContext, mHandler);
         }
         return instance;
+    }
+
+    public void setUpdate_interval(long update_interval) {
+        this.update_interval = update_interval;
+        times = 0;
     }
 
     /**
@@ -183,18 +188,18 @@ public class TrafficInfo {
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(times == UPDATE_FREQUENCY){
+                    if(times == update_interval){
                         Message msg = new Message();
                         msg.what = 1;
                         //msg.arg1 = getNetSpeed();
                         msg.obj = getNetSpeed();
                         mHandler.sendMessage(msg);
-                        times = 1;
+                        times = 0;
                     } else {
-                        times++;
+                        times+=100;
                     }
                 }
-            }, 1000, 1000); // 每秒更新一次
+            }, 1000, 100); // 每秒更新一次
         }
     }
 

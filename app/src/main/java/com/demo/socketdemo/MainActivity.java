@@ -105,10 +105,10 @@ public class MainActivity extends AppBaseActivity {
 		},1000);
 	}
 	public void connectService(View view) {
-		StaticUtil.saveIpConfig(this, ipText.getText().toString(), portText
-				.getText().toString());
-		startService();
-		finish();
+//		StaticUtil.saveIpConfig(this, ipText.getText().toString(), portText
+//				.getText().toString());
+//		startService();
+//		finish();
 	}
 	/**
 	 * 启动服务

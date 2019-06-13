@@ -12,33 +12,19 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.PowerManager;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demo.socketdemo.MainActivity;
-import com.demo.socketdemo.R;
-import com.demo.socketdemo.socket.ConnectCheck;
-import com.demo.socketdemo.socket.SocketCharacterStreamService;
-import com.demo.socketdemo.socket.SocketTcpClient;
+import com.demo.socketdemo.NetMonitorActivity;
 import com.demo.socketdemo.socket.StaticUtil;
-import com.demo.socketdemo.socket.TestClient;
 import com.demo.socketdemo.socket.UdpClientConnector;
-import com.demo.socketdemo.socket.UdpHelper;
-import com.demo.socketdemo.util.DeviceUtils;
 import com.demo.socketdemo.util.TrafficInfo;
-import com.demo.socketdemo.widget.FloatView;
 
 /**
  * VR播放服务
  */
 public class SocketService extends Service {
 
-	private SocketTcpClient tcpClient;
-
-	private SocketCharacterStreamService socketService;
-	
 	private static Handler handler;
 
 	private static SocketService mScoketService;
@@ -50,19 +36,18 @@ public class SocketService extends Service {
 		return mScoketService;
 	}
 
-	TestClient testClient;
+	private SharedPreferences preferences;
 
 	private UdpClientConnector udpClientConnector;
 
 	private TrafficInfo speed;
+	private String phoneId;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			if (msg.what == 1) {
-//				setSpeed(msg.obj + "kb/s");
-//				netText.setText(msg+"kb");
-				sendMessageToServer("NetInfo:PhoneID=1,Flow="+msg.obj+"|");
-				MainActivity.mActivity.sendNetMes(msg.obj.toString());
+				sendMessageToServer("NetInfo:PhoneID="+phoneId+",Flow="+msg.obj+"|");
+				NetMonitorActivity.monitorActivity.sendNetMes(msg.obj.toString());
 			}
 			super.handleMessage(msg);
 		}
@@ -82,7 +67,12 @@ public class SocketService extends Service {
 
 		initUDPSocket();
 
+		preferences = getApplicationContext().getSharedPreferences(
+				StaticUtil.REAL_9, Context.MODE_PRIVATE);
+		phoneId = preferences.getString("phoneId","1");
+
 		speed = new TrafficInfo(getApplicationContext(),mHandler,getUid());
+		speed.setUpdate_interval(Long.valueOf(preferences.getString("interval","200")));
 		speed.startCalculateNetSpeed(); // 开启网速监测‘
 
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -96,45 +86,27 @@ public class SocketService extends Service {
 		NotificationChannel notificationChannel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_LOW);
 		notificationManager.createNotificationChannel(notificationChannel);
 	}
-
 	private void initUDPSocket(){
 		udpClientConnector = UdpClientConnector.getInstance();
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
-		SharedPreferences preferences = getApplicationContext().getSharedPreferences(
-				StaticUtil.REAL_9, Context.MODE_PRIVATE);
 		udpClientConnector.createConnector(preferences.getString("ip",StaticUtil.SOCKET_IP),preferences.getInt("port",StaticUtil.SOCKET_PORT));
 		flags = START_STICKY;
 		return super.onStartCommand(intent, flags, startId);
 	}
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
-		if(tcpClient!=null){
-			tcpClient.disConnect();
-		}
-//		if(floatView!=null){
-//			floatView.removeFromWindow();
-//            floatView = null;
-//		}
 		System.out.println("SocketService...onDestroy");
-		MainActivity.mActivity.startService();
+		NetMonitorActivity.monitorActivity.startService();
         super.onDestroy();
-	}
-	public void onReceiverMessage(String msg) {
-		Toast.makeText(MainActivity.mActivity, msg, Toast.LENGTH_SHORT).show();
-		if(msg.contains("-")){
-			tcpClient.setConnected(true);
-		}
 	}
 	/**
 	 * 发送消息至服务端
 	 * @param message
 	 */
 	public void sendMessageToServer(final String message){
-
 		udpClientConnector.sendStr(message);
 	}
 	public static void showMessageNotify(final String message){
@@ -148,6 +120,15 @@ public class SocketService extends Service {
 			});
 		}
 	}
+
+	/**
+	 * 配置改变的时候调用
+	 */
+	public void changeConfig(String ip, String port,String phoneId,long interval){
+		this.phoneId = phoneId;
+		speed.setUpdate_interval(interval);
+		udpClientConnector.createConnector(ip,Integer.valueOf(port));
+	}
 	/**
 	 * 获取当前应用uid
 	 */
@@ -156,12 +137,9 @@ public class SocketService extends Service {
 		PackageManager packageManager = getApplicationContext().getPackageManager();
 		try {
 			PackageInfo packageInfo = packageManager.getPackageInfo(getApplicationContext().getPackageName(), PackageManager.GET_META_DATA);
-
 			uid = packageInfo.applicationInfo.uid;
-
 		} catch (PackageManager.NameNotFoundException e) {
 		}
 		return uid;
 	}
-
 }
