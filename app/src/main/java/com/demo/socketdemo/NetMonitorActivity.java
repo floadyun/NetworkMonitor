@@ -1,12 +1,10 @@
 package com.demo.socketdemo;
 
 import android.content.Intent;
-import android.icu.text.RelativeDateTimeFormatter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
-
 import com.base.lib.baseui.AppBaseActivity;
 import com.base.lib.util.AbStrUtil;
 import com.demo.socketdemo.service.SocketService;
@@ -53,17 +51,22 @@ public class NetMonitorActivity extends AppBaseActivity {
             startService(intent);
         }
     }
+
     public void sendNetMes(String msg){
         double speed = Double.valueOf(msg);
-        if(speed<1){
-            msg = AbStrUtil.formatDouble(speed*1024,1);
-            unitText.setText("BS");
-        }else if(speed>1000){
+        String uinit = "Kbps/s";
+        if(speed<1000){
+            unitText.setText("Kbps/s");
+        }else if(speed<1000*1000){
+            uinit = "Mbps/s";
             msg = AbStrUtil.formatDouble(speed/1024,1);
-            unitText.setText("MBS");
+            unitText.setText("Mbps/s");
         }else {
-            unitText.setText("KBS");
+            uinit = "Gbps/s";
+            msg = AbStrUtil.formatDouble(speed/(1024*1024),1);
+            unitText.setText("Gbps/s");
         }
         speedText.setText(msg);
+        SocketService.getVRService().netText.setText(msg+uinit);
     }
 }

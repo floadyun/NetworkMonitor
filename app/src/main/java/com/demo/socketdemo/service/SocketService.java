@@ -12,13 +12,19 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.base.lib.util.AbStrUtil;
 import com.demo.socketdemo.MainActivity;
 import com.demo.socketdemo.NetMonitorActivity;
+import com.demo.socketdemo.R;
 import com.demo.socketdemo.socket.StaticUtil;
 import com.demo.socketdemo.socket.UdpClientConnector;
+import com.demo.socketdemo.util.DeviceUtils;
 import com.demo.socketdemo.util.TrafficInfo;
+import com.demo.socketdemo.widget.FloatView;
 
 /**
  * VR播放服务
@@ -40,14 +46,19 @@ public class SocketService extends Service {
 
 	private UdpClientConnector udpClientConnector;
 
+	private FloatView floatView;
+	public TextView netText;
+	private View guideView;
+	private long interval;
 	private TrafficInfo speed;
 	private String phoneId;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			if (msg.what == 1) {
-				sendMessageToServer("NetInfo:PhoneID="+phoneId+",Flow="+msg.obj+"|");
-				NetMonitorActivity.monitorActivity.sendNetMes(msg.obj.toString());
+				String speed = AbStrUtil.formatDouble(Double.valueOf(msg.obj.toString())*(1000/interval),1);
+				sendMessageToServer("NetInfo:PhoneID="+phoneId+",Flow="+speed+"|");
+				NetMonitorActivity.monitorActivity.sendNetMes(speed);
 			}
 			super.handleMessage(msg);
 		}
@@ -72,7 +83,8 @@ public class SocketService extends Service {
 		phoneId = preferences.getString("phoneId","1");
 
 		speed = new TrafficInfo(getApplicationContext(),mHandler,getUid());
-		speed.setUpdate_interval(Long.valueOf(preferences.getString("interval","200")));
+		interval = Long.valueOf(preferences.getString("interval",StaticUtil.INTEVAL));
+		speed.setUpdate_interval(interval);
 		speed.startCalculateNetSpeed(); // 开启网速监测‘
 
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -80,6 +92,35 @@ public class SocketService extends Service {
 			Notification notification = new Notification.Builder(getApplicationContext(), channelID).build();
 			startForeground(1, notification);
 		}
+		initFloatView();
+	}
+	/**
+	 * 初始化新手指引悬浮窗
+	 */
+	private void initFloatView(){
+		if(floatView!=null)return;
+		guideView = NetMonitorActivity.monitorActivity.getLayoutInflater().inflate(R.layout.network_float_layout,null);
+		netText = guideView.findViewById(R.id.float_network_text);
+		floatView = new FloatView(NetMonitorActivity.monitorActivity, DeviceUtils.getScreenWidth(this)-DeviceUtils.getDeviceDimen(this, 175),
+				DeviceUtils.getDeviceDimen(this,400), guideView);
+		floatView.setFloatViewClickListener(new FloatView.IFloatViewClick() {
+			@Override
+			public void onFloatViewClick() {
+
+			}
+			@Override
+			public void onCloseViewClick() {
+
+			}
+		});
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if(floatView!=null){
+					floatView.addToWindow();
+				}
+			}
+		},1000);
 	}
 	private void createNotificationChannel(){
 		NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
@@ -99,7 +140,9 @@ public class SocketService extends Service {
 	@Override
 	public void onDestroy() {
 		System.out.println("SocketService...onDestroy");
-		NetMonitorActivity.monitorActivity.startService();
+		if(floatView!=null){
+			floatView.removeFromWindow();
+		}
         super.onDestroy();
 	}
 	/**
@@ -126,6 +169,7 @@ public class SocketService extends Service {
 	 */
 	public void changeConfig(String ip, String port,String phoneId,long interval){
 		this.phoneId = phoneId;
+		this.interval = interval;
 		speed.setUpdate_interval(interval);
 		udpClientConnector.createConnector(ip,Integer.valueOf(port));
 	}

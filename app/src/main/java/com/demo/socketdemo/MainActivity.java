@@ -51,7 +51,6 @@ public class MainActivity extends AppBaseActivity {
 			Toast.makeText(this,"请在设置中打开悬浮窗权限",Toast.LENGTH_SHORT).show();
 			requestSettingCanDrawOverlays();
 		}else {
-			acquireWakeLock();
 
 			startService();
 
@@ -121,32 +120,6 @@ public class MainActivity extends AppBaseActivity {
 			startService(intent);
 		}
 	}
-	public void sendTest(View view){
-		SocketService.getVRService().sendMessageToServer("测试....");
-	}
-	private PowerManager.WakeLock mWakeLock;
-	//申请设备电源锁
-	private void acquireWakeLock()
-	{
-		if (null == mWakeLock)
-		{
-			PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
-			if (null != mWakeLock)
-			{
-				mWakeLock.acquire();
-			}
-		}
-	}
-	//释放设备电源锁
-	public void releaseWakeLock()
-	{
-		if (null != mWakeLock)
-		{
-			mWakeLock.release();
-			mWakeLock = null;
-		}
-	}
 	public void sendNetMes(String msg){
 		netText.setText(msg+"kb/s");
 	}
@@ -168,8 +141,6 @@ public class MainActivity extends AppBaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode==REQUEST_DIALOG_PERMISSION){
-			acquireWakeLock();
-
 			startService();
 
 			initFloatView();

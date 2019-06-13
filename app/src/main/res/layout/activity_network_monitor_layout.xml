@@ -2,7 +2,8 @@
 <com.base.lib.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_network_monitor">
+    android:background="@drawable/bg_network_monitor"
+    android:keepScreenOn="true">
     <com.base.lib.autolayout.AutoLinearLayout
         android:layout_width="800px"
         android:layout_height="806px"

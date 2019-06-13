@@ -43,7 +43,7 @@ public class SettingActivity extends AppBaseActivity {
         ipText.setText(preferences.getString("ip",StaticUtil.SOCKET_IP));
         portText.setText(""+preferences.getInt("port",StaticUtil.SOCKET_PORT));
         phoneText.setText(preferences.getString("phoneId","1"));
-        intervalText.setText(preferences.getString("interval","200"));
+        intervalText.setText(preferences.getString("interval",StaticUtil.INTEVAL));
     }
     public void settingOperate(View view){
         switch (view.getId()){
