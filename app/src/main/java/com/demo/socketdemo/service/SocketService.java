@@ -92,7 +92,7 @@ public class SocketService extends Service {
 			Notification notification = new Notification.Builder(getApplicationContext(), channelID).build();
 			startForeground(1, notification);
 		}
-		initFloatView();
+//		initFloatView();
 	}
 	/**
 	 * 初始化新手指引悬浮窗
@@ -185,5 +185,31 @@ public class SocketService extends Service {
 		} catch (PackageManager.NameNotFoundException e) {
 		}
 		return uid;
+	}
+
+	/**
+	 * 移除悬浮框
+	 */
+	public void removeFloatView(){
+		if(floatView!=null){
+			floatView.removeFromWindow();
+		}
+	}
+
+	/**
+	 * 添加悬浮框
+	 */
+	public void addFloatView(){
+		floatView = null;
+		initFloatView();
+	}
+
+	/**
+	 * 设置悬浮窗流量文字
+	 */
+	public void setNetFloatText(String msg){
+		if(netText!=null){
+			netText.setText(msg);
+		}
 	}
 }

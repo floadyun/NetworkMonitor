@@ -4,41 +4,43 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_network_monitor"
     android:keepScreenOn="true">
+    <TextView
+        style="@style/normal_white_text_style"
+        android:text="@string/net_nonitor_title_text"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_50"
+        android:layout_marginTop="100px"/>
     <com.base.lib.autolayout.AutoLinearLayout
-        android:layout_width="800px"
-        android:layout_height="806px"
+        android:layout_width="1000px"
+        android:layout_height="1006px"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_marginTop="250px"
         android:background="@drawable/bg_speed">
         <TextView
             android:id="@+id/net_speed_text"
             style="@style/normal_white_text_style"
             android:textStyle="bold"
-            android:textSize="@dimen/text_size_32"
+            android:textSize="@dimen/text_size_140"
             android:text="525"
+            android:lineSpacingExtra="0dp"
             android:layout_centerHorizontal="true"/>
         <TextView
             android:id="@+id/net_unit_text"
             style="@style/normal_text_style"
-            android:textSize="@dimen/text_size_32"
+            android:textSize="@dimen/text_size_40"
             android:text="KBS"
+            android:layout_marginTop="-5px"
             android:textColor="#65C3FF"/>
     </com.base.lib.autolayout.AutoLinearLayout>
     <Button
         android:id="@+id/set_up_btn"
-        android:layout_width="599px"
-        android:layout_height="119px"
+        android:layout_width="300px"
+        android:layout_height="300px"
         android:onClick="toSetting"
-        android:background="@drawable/bg_set_up_btn"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="200px"/>
-    <Button
-        android:id="@+id/exit_btn"
-        android:layout_width="200px"
-        android:layout_height="100px"
-        android:background="@null"
-        android:onClick="exitApp"/>
+        android:layout_alignParentRight="true"
+        android:background="@null"/>
 </com.base.lib.autolayout.AutoRelativeLayout>

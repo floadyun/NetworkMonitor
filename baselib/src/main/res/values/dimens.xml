@@ -60,7 +60,8 @@
     <dimen name="text_size_64">32sp</dimen>
     <dimen name="text_size_72">36sp</dimen>
     <dimen name="text_size_80">40sp</dimen>
-
+    <dimen name="text_size_100">50sp</dimen>
+    <dimen name="text_size_140">70sp</dimen>
     <!--悬浮按钮-->
     <dimen name="action_button_size">72dp</dimen>
     <dimen name="action_button_content_margin">16dp</dimen>

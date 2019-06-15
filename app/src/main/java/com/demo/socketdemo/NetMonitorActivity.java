@@ -20,6 +20,10 @@ public class NetMonitorActivity extends AppBaseActivity {
 
     private TextView speedText,unitText;
 
+    private long firstTime;
+
+    private int clickCount = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +42,17 @@ public class NetMonitorActivity extends AppBaseActivity {
      * @param view
      */
     public void toSetting(View view){
-        startActivity(new Intent(this,SettingActivity.class));
+        clickCount++;
+        if((System.currentTimeMillis()-firstTime) > 3000)  //System.currentTimeMillis()无论何时调用，肯定大于2000
+        {
+            firstTime = System.currentTimeMillis();
+            clickCount = 0;
+        }else{
+            if(clickCount==2){
+                clickCount = 0;
+                startActivity(new Intent(this,SettingActivity.class));
+            }
+        }
     }
     /**
      * 启动服务
@@ -67,6 +81,21 @@ public class NetMonitorActivity extends AppBaseActivity {
             unitText.setText("Gbps/s");
         }
         speedText.setText(msg);
-        SocketService.getVRService().netText.setText(msg+uinit);
+        SocketService.getVRService().setNetFloatText(msg+uinit);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(SocketService.getVRService()!=null){
+            SocketService.getVRService().removeFloatView();
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(SocketService.getVRService()!=null){
+            SocketService.getVRService().addFloatView();
+        }
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">流量监控</string>
+    <string name="net_nonitor_title_text">5G网络测速\n5G Network speed</string>
 </resources>
