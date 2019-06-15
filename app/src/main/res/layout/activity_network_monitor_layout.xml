@@ -11,30 +11,28 @@
         android:gravity="center"
         android:textSize="@dimen/text_size_50"
         android:layout_marginTop="100px"/>
-    <com.base.lib.autolayout.AutoLinearLayout
+    <com.base.lib.autolayout.AutoRelativeLayout
         android:layout_width="1000px"
         android:layout_height="1006px"
         android:orientation="vertical"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:layout_marginTop="250px"
         android:background="@drawable/bg_speed">
         <TextView
             android:id="@+id/net_speed_text"
             style="@style/normal_white_text_style"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_140"
-            android:text="525"
+            android:textSize="@dimen/text_size_120"
             android:lineSpacingExtra="0dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerInParent="true"/>
         <TextView
             android:id="@+id/net_unit_text"
             style="@style/normal_text_style"
             android:textSize="@dimen/text_size_40"
-            android:text="KBS"
-            android:layout_marginTop="-5px"
+            android:layout_below="@id/net_speed_text"
+            android:layout_marginTop="-50px"
+            android:layout_centerHorizontal="true"
             android:textColor="#65C3FF"/>
-    </com.base.lib.autolayout.AutoLinearLayout>
+    </com.base.lib.autolayout.AutoRelativeLayout>
     <Button
         android:id="@+id/set_up_btn"
         android:layout_width="300px"

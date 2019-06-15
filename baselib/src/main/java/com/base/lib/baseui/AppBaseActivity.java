@@ -184,7 +184,7 @@ public class AppBaseActivity extends AppCompatActivity {
      * @param imageUrl
      */
     protected void setImageUrl(int imageId,String imageUrl){
-        GlideManage.getInstance().with(this, R.mipmap.ic_launcher,imageUrl,(ImageView)findViewById(imageId));
+      //  GlideManage.getInstance().with(this, R.mipmap.ic_launcher,imageUrl,(ImageView)findViewById(imageId));
     }
     /**
      * 设置TextView内容

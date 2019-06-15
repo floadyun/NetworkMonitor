@@ -68,19 +68,16 @@ public class NetMonitorActivity extends AppBaseActivity {
 
     public void sendNetMes(String msg){
         double speed = Double.valueOf(msg);
-        String uinit = "Kbps/s";
-        if(speed<1000){
-            unitText.setText("Kbps/s");
-        }else if(speed<1000*1000){
-            uinit = "Mbps/s";
-            msg = AbStrUtil.formatDouble(speed/1024,1);
-            unitText.setText("Mbps/s");
-        }else {
-            uinit = "Gbps/s";
-            msg = AbStrUtil.formatDouble(speed/(1024*1024),1);
-            unitText.setText("Gbps/s");
+        String uinit = "Kbps";
+        if(speed<1024*128){//1Mbps=128Kb/s
+            uinit = "Mbps";
+            msg = AbStrUtil.formatDouble(speed*8/1024,1);
+        }else {//1Gbps=1024Mbps=128*1024Kb/s
+            uinit = "Gbps";
+            msg = AbStrUtil.formatDouble(speed*8/(1024*1024),1);
         }
         speedText.setText(msg);
+        unitText.setText(uinit);
         SocketService.getVRService().setNetFloatText(msg+uinit);
     }
 
