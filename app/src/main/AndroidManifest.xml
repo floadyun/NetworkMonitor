@@ -15,14 +15,14 @@
         <meta-data
             android:name="design_height"
             android:value="2244"/>
-        <activity android:name=".NetMonitorActivity" android:screenOrientation="portrait" android:theme="@style/NoTitleFullscreen">
+        <activity android:name=".NetMonitorActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingActivity" android:screenOrientation="portrait" android:theme="@style/NoTitleFullscreen"/>
+        <activity android:name=".SettingActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <service android:name=".service.SocketService"/>
         <receiver android:name=".receiver.PhoneBroadcastReceiver">
             <intent-filter>
