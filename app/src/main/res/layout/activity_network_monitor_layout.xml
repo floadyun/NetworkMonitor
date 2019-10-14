@@ -10,13 +10,15 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:textSize="@dimen/text_size_50"
-        android:layout_marginTop="200px"/>
+        android:layout_marginTop="350px"/>
     <com.base.lib.autolayout.AutoRelativeLayout
         android:layout_width="1000px"
         android:layout_height="1006px"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="400px"
         android:background="@drawable/bg_speed">
         <TextView
             android:id="@+id/net_speed_text"
@@ -34,8 +36,8 @@
             android:textColor="#65C3FF"/>
     </com.base.lib.autolayout.AutoRelativeLayout>
     <View
-        android:layout_width="377px"
-        android:layout_height="170px"
+        android:layout_width="453px"
+        android:layout_height="204px"
         android:background="@drawable/ic_huawei_logo"/>
     <Button
         android:id="@+id/set_up_btn"
