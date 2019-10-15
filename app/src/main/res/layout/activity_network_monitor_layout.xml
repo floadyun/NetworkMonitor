@@ -5,10 +5,8 @@
     android:background="@drawable/bg_network_monitor"
     android:keepScreenOn="true">
     <View
-        android:layout_width="266px"
-        android:layout_height="116px"
-        android:layout_marginTop="30px"
-        android:layout_marginLeft="30px"
+        android:layout_width="453px"
+        android:layout_height="204px"
         android:background="@drawable/ic_huawei_logo"/>
     <TextView
         style="@style/normal_white_text_style"
