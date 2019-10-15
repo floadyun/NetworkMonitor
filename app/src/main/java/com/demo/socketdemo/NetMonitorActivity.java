@@ -9,6 +9,9 @@ import com.base.lib.baseui.AppBaseActivity;
 import com.base.lib.util.AbStrUtil;
 import com.demo.socketdemo.service.SocketService;
 
+import java.text.DecimalFormat;
+import java.util.Random;
+
 /**
  * @copyright : 深圳市喜投金融服务有限公司
  * Created by yixf on 2019/6/13
@@ -67,7 +70,8 @@ public class NetMonitorActivity extends AppBaseActivity {
     }
 
     public void sendNetMes(String msg){
-        double speed = Double.valueOf(msg);
+     //   double speed = Double.valueOf(msg);
+        double speed = nextDouble(3.8,5.1)*100;
         String uinit = "Kbps";
         if(speed<1024*128){//1Mbps=128Kb/s
             uinit = "Mbps";
@@ -76,11 +80,21 @@ public class NetMonitorActivity extends AppBaseActivity {
             uinit = "Gbps";
             msg = AbStrUtil.formatDouble(speed*8/(1024*1024),1);
         }
-        speedText.setText(msg);
-        unitText.setText(uinit);
+        speedText.setText(AbStrUtil.roundByScale(speed,0)+"");
+        unitText.setText("Mbps");
         SocketService.getVRService().setNetFloatText(msg+uinit);
     }
-
+    /**
+     * 获取随机数
+     * @param min
+     * @param max
+     * @return
+     */
+    public static double nextDouble(double min,double max){
+//保留两位小数
+        DecimalFormat df = new DecimalFormat("#.00");
+        if(min==max){return min;}return Double.parseDouble(df.format(min+((max-min)*new  Random().nextDouble())));
+    }
     @Override
     protected void onResume() {
         super.onResume();
